@@ -342,6 +342,37 @@ const updateRecipe = async (recipeId) => {
     <hr />
 
     <h2>My Recipes</h2>
+    <p>
+     <strong>Total Recipes:</strong> {recipes.length}
+    </p>
+    <h3>Cuisine Statistics</h3>
+
+{Object.entries(
+  recipes.reduce((acc, item) => {
+    acc[item.cuisine] = (acc[item.cuisine] || 0) + 1;
+    return acc;
+  }, {})
+).map(([cuisine, count]) => (
+  <p key={cuisine}>
+    {cuisine}: {count}
+  </p>
+))}
+
+<h3>Dietary Statistics</h3>
+
+{Object.entries(
+  recipes.reduce((acc, item) => {
+    if (item.dietaryPreference) {
+      acc[item.dietaryPreference] =
+        (acc[item.dietaryPreference] || 0) + 1;
+    }
+    return acc;
+  }, {})
+).map(([diet, count]) => (
+  <p key={diet}>
+    {diet}: {count}
+  </p>
+))}
     <input
   type="text"
   placeholder="Search recipes..."
@@ -385,7 +416,7 @@ const updateRecipe = async (recipeId) => {
       <ul>
         {recipes
         .filter((item) =>
-          item.title.toLowerCase().includes(searchTerm.toLowerCase())
+          (item.title || "").toLowerCase().includes(searchTerm.toLowerCase())
   )
         .filter((item) =>
           selectedCuisine === "" || item.cuisine === selectedCuisine
