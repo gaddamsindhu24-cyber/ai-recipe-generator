@@ -338,11 +338,19 @@ const updateRecipe = async (recipeId) => {
 
         {message && <div>{message}</div>}
         {showHistory && (
-  <div>
+  <div className="mx-auto p-4 mt-4 mb-4"
+  style={{
+    backgroundColor: "#f3eafa",
+    borderRadius: "20px",
+    border: "1px solid #d8c4f0"
+  }}>
     <hr />
 
-    <h2 className="text-center text-primary fw-bold mb-4">
-  🍳 My Recipes
+    <h2 className="text-white fw-bold text-center rounded p-3 mb-4"
+    style={{ backgroundColor: "#9b59b6"
+     }}
+    >
+    🍳 My Recipes
 </h2>
 
 <p>
@@ -489,15 +497,35 @@ const updateRecipe = async (recipeId) => {
   </div>
 )}
 {editingRecipe && (
-  <div>
+  <div
+  className="mx-auto p-4 mt-4 mb-4"
+  style={{
+    backgroundColor: "#fff0f6",
+    borderRadius: "20px",
+    border: "1px solid #f3c1d5"
+  }}
+>
     <hr />
 
-    <h2>Edit Recipe</h2>
+    <h2 className="text-white fw-bold text-center rounded p-3 mb-4"  
+    style={{ backgroundColor: "#e83e8c" }}
+    >
+      ✏️Edit Recipe
+      </h2>
+    <div className="card shadow-sm mx-auto mt-4 mb-4" style={{
+    maxWidth: "650px",
+    backgroundColor: "#f3a6c7",
+    border: "1px solid #f3a6c7",
+    borderRadius: "15px"
+  }}>
 
-    <label>Recipe Title</label>
+    </div>
+
+    <label className="form-label fw-bold">Recipe Title</label>
     <br />
     <input
       type="text"
+      className="form-control w-75 mx-auto"
       value={editingRecipe.title || ""}
       onChange={(e) =>
         setEditingRecipe({
@@ -510,10 +538,11 @@ const updateRecipe = async (recipeId) => {
     <br />
     <br />
 
-    <label>Cuisine</label>
+    <label className="form-label fw-bold">Cuisine</label>
     <br />
     <input
       type="text"
+      className="form-control w-75 mx-auto"
       value={editingRecipe.cuisine || ""}
       onChange={(e) =>
         setEditingRecipe({
@@ -526,10 +555,11 @@ const updateRecipe = async (recipeId) => {
     <br />
     <br />
 
-    <label>Meal Type</label>
+    <label className="form-label fw-bold">Meal Type</label>
     <br />
     <input
       type="text"
+      className="form-control w-75 mx-auto"
       value={editingRecipe.mealType || ""}
       onChange={(e) =>
         setEditingRecipe({
@@ -542,11 +572,15 @@ const updateRecipe = async (recipeId) => {
     <br />
     <br />
 
-    <button onClick={() => updateRecipe(editingRecipe._id)}>
+    <button 
+     className="btn btn-primary me-2"
+    onClick={() => updateRecipe(editingRecipe._id)}>
       Save Changes
     </button>
 
-    <button onClick={() => setEditingRecipe(null)}>
+    <button 
+     className="btn btn-outline-secondary"
+     onClick={() => setEditingRecipe(null)}>
       Cancel
     </button>
   </div>
@@ -623,18 +657,29 @@ const updateRecipe = async (recipeId) => {
   }
 
   return (
-    <div>
-      <h1>AI Recipe Generator 🍳</h1>
+    <div style={{
+    backgroundColor: "#f8f1ff",
+    minHeight: "100vh",
+    padding: "40px 20px"
+  }}>
+      <h1 className="text-center fw-bold mb-2" style={{ color: "#0c4c2a" }}>
+        AI Recipe Generator 🍳
+        </h1>
 
-      <h2>{isLogin ? "Login" : "Create Account"}</h2>
+      <h2
+      className="text-white text-center fw-bold rounded p-3 mb-4"
+      style={{ backgroundColor: "#817b7e" }}
+      >
+        {isLogin ? "Login" : "Create Account"}</h2>
 
       <form onSubmit={handleAuth}>
         {!isLogin && (
           <div>
-            <label>Name</label>
+            <label className="form-label fw-bold">Name</label>
             <br />
             <input
               type="text"
+              className="form-control w-75 mx-auto"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -645,10 +690,11 @@ const updateRecipe = async (recipeId) => {
         <br />
 
         <div>
-          <label>Email</label>
+          <label className="form-label fw-bold">Email</label>
           <br />
           <input
             type="email"
+            className=" form-control w-75 mx-auto bg-white"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -657,11 +703,12 @@ const updateRecipe = async (recipeId) => {
 
         <br />
 
-        <div>
-          <label>Password</label>
+        <div className="mb-3">
+          <label className="form-label fw-bold">Password</label>
           <br />
           <input
             type="password"
+            className="form-control  bg-white w-75 mx-auto"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
