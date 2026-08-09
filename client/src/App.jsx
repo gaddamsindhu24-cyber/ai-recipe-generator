@@ -7,6 +7,7 @@ function App() {
   );
   const [showHistory, setShowHistory] = useState(false);
   const [recipes, setRecipes] = useState([]);
+  const [editingRecipe, setEditingRecipe] = useState(null);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -181,6 +182,42 @@ function App() {
     setMessage("Cannot connect to server");
   }
 };
+const updateRecipe = async (recipeId) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/recipes/${recipeId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editingRecipe),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Failed to update recipe");
+      return;
+    }
+
+    setRecipes((currentRecipes) =>
+      currentRecipes.map((item) =>
+        item._id === recipeId ? data.recipe : item
+      )
+    );
+
+    setRecipe(data.recipe);
+    setEditingRecipe(null);
+    setMessage("Recipe updated successfully");
+  } catch (error) {
+    setMessage("Cannot connect to server");
+  }
+};
 
   if (isLoggedIn) {
     return (
@@ -293,6 +330,9 @@ function App() {
             >
               View Recipe
             </button>
+            <button onClick={() => setEditingRecipe(item)}>
+               Edit
+            </button>
             <button onClick={() => deleteRecipe(item._id)}>
               Delete
             </button>
@@ -303,6 +343,69 @@ function App() {
 
     <button onClick={() => setShowHistory(false)}>
       Back to Generator
+    </button>
+  </div>
+)}
+{editingRecipe && (
+  <div>
+    <hr />
+
+    <h2>Edit Recipe</h2>
+
+    <label>Recipe Title</label>
+    <br />
+    <input
+      type="text"
+      value={editingRecipe.title || ""}
+      onChange={(e) =>
+        setEditingRecipe({
+          ...editingRecipe,
+          title: e.target.value,
+        })
+      }
+    />
+
+    <br />
+    <br />
+
+    <label>Cuisine</label>
+    <br />
+    <input
+      type="text"
+      value={editingRecipe.cuisine || ""}
+      onChange={(e) =>
+        setEditingRecipe({
+          ...editingRecipe,
+          cuisine: e.target.value,
+        })
+      }
+    />
+
+    <br />
+    <br />
+
+    <label>Meal Type</label>
+    <br />
+    <input
+      type="text"
+      value={editingRecipe.mealType || ""}
+      onChange={(e) =>
+        setEditingRecipe({
+          ...editingRecipe,
+          mealType: e.target.value,
+        })
+      }
+    />
+
+    <br />
+    <br />
+
+    <button onClick={() => updateRecipe(editingRecipe._id)}>
+      Save Changes
+    </button>
+
+    <button onClick={() => setEditingRecipe(null)}>
+      Cancel
     </button>
   </div>
 )}
