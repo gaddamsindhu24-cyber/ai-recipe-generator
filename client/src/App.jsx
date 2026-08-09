@@ -249,7 +249,7 @@ const updateRecipe = async (recipeId) => {
   </div>
 </nav>
 
-        <div className="container">
+        <div className="container  bg-light min-vh-100 p-4">
   <div className="card shadow-sm">
     <div className="card-body">
       <h2 className="card-title mb-4">🍽️ Generate a Recipe</h2>
@@ -341,10 +341,29 @@ const updateRecipe = async (recipeId) => {
   <div>
     <hr />
 
-    <h2>My Recipes</h2>
-    <p>
-     <strong>Total Recipes:</strong> {recipes.length}
-    </p>
+    <h2 className="text-center text-primary fw-bold mb-4">
+  🍳 My Recipes
+</h2>
+
+<p>
+  <strong>Total Recipes:</strong> {recipes.length}
+</p>
+
+<p>
+  <strong>Total Cuisines:</strong>{" "}
+  {new Set(recipes.map((item) => item.cuisine)).size}
+</p>
+
+<p>
+  <strong>Total Dietary Types:</strong>{" "}
+  {
+    new Set(
+      recipes
+        .map((item) => item.dietaryPreference)
+        .filter(Boolean)
+    ).size
+  }
+</p>
     <h3>Cuisine Statistics</h3>
 
 {Object.entries(
@@ -375,6 +394,7 @@ const updateRecipe = async (recipeId) => {
 ))}
     <input
   type="text"
+  className="form-control"
   placeholder="Search recipes..."
   value={searchTerm}
   onChange={(e) => setSearchTerm(e.target.value)}
@@ -383,6 +403,7 @@ const updateRecipe = async (recipeId) => {
 <br />
 <br />
 <select
+  className="form-select w-75"
   value={selectedCuisine}
   onChange={(e) => setSelectedCuisine(e.target.value)}
 >
@@ -398,6 +419,7 @@ const updateRecipe = async (recipeId) => {
 <br />
 
 <select
+  className="form-select w-75"
   value={selectedDiet}
   onChange={(e) => setSelectedDiet(e.target.value)}
 >
@@ -413,7 +435,7 @@ const updateRecipe = async (recipeId) => {
     {recipes.length === 0 ? (
       <p>No recipes found.</p>
     ) : (
-      <ul>
+      <ul className="list-group">
         {recipes
         .filter((item) =>
           (item.title || "").toLowerCase().includes(searchTerm.toLowerCase())
@@ -425,7 +447,10 @@ const updateRecipe = async (recipeId) => {
           selectedDiet === "" || item.dietaryPreference === selectedDiet
 )
         .map((item) => (
-          <li key={item._id}>
+          <li
+           key={item._id}
+           className="list-group-item shadow-sm rounded mb-3 p-3"
+           >
             <strong>{item.title}</strong>
             <br />
             Cuisine: {item.cuisine}
@@ -433,6 +458,7 @@ const updateRecipe = async (recipeId) => {
             Meal: {item.mealType}
             <br />
             <button
+              className="btn btn-primary me-2"
               onClick={() => {
                 setRecipe(item);
                 setShowHistory(false);
@@ -440,10 +466,15 @@ const updateRecipe = async (recipeId) => {
             >
               View Recipe
             </button>
-            <button onClick={() => setEditingRecipe(item)}>
+            
+            <button 
+            className="btn btn-warning me-2"
+            onClick={() => setEditingRecipe(item)}>
                Edit
             </button>
-            <button onClick={() => deleteRecipe(item._id)}>
+            <button 
+            
+            className="btn btn-danger"onClick={() => deleteRecipe(item._id)}>
               Delete
             </button>
           </li>
