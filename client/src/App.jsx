@@ -7,6 +7,9 @@ function App() {
   );
   const [showHistory, setShowHistory] = useState(false);
   const [recipes, setRecipes] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCuisine, setSelectedCuisine] = useState("");
+  const [selectedDiet, setSelectedDiet] = useState("");
   const [editingRecipe, setEditingRecipe] = useState(null);
 
   const [name, setName] = useState("");
@@ -222,99 +225,175 @@ const updateRecipe = async (recipeId) => {
   if (isLoggedIn) {
     return (
       <div>
-        <h1>AI Recipe Generator 🍳</h1>
-        <button onClick={fetchRecipes}>My Recipes</button>
+        <nav className="navbar navbar-dark bg-dark mb-4">
+  <div className="container">
+    <span className="navbar-brand mb-0 h1">
+      🍳 AI Recipe Generator
+    </span>
 
-        <button onClick={logout}>Logout</button>
+    <div>
+      <button
+        className="btn btn-outline-light me-2"
+        onClick={fetchRecipes}
+      >
+        My Recipes
+      </button>
 
-        <hr />
+      <button
+        className="btn btn-danger"
+        onClick={logout}
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
 
-        <h2>Generate a Recipe</h2>
+        <div className="container">
+  <div className="card shadow-sm">
+    <div className="card-body">
+      <h2 className="card-title mb-4">🍽️ Generate a Recipe</h2>
 
-        <form onSubmit={generateRecipe}>
-          <div>
-            <label>Available Ingredients</label>
-            <br />
-            <textarea
-              rows="4"
-              value={ingredients}
-              onChange={(e) => setIngredients(e.target.value)}
-              placeholder="Example: chicken, rice, onion, tomato"
-              required
-            />
-          </div>
+      <form onSubmit={generateRecipe}>
+        <div className="mb-3">
+          <label className="form-label">
+            Available Ingredients
+          </label>
 
-          <br />
+          <textarea
+            className="form-control"
+            rows="4"
+            value={ingredients}
+            onChange={(e) => setIngredients(e.target.value)}
+            placeholder="Example: chicken, rice, onion, tomato"
+            required
+          />
+        </div>
 
-          <div>
-            <label>Cuisine</label>
-            <br />
-            <select
-              value={cuisine}
-              onChange={(e) => setCuisine(e.target.value)}
-            >
-              <option>Indian</option>
-              <option>Italian</option>
-              <option>Chinese</option>
-              <option>Mexican</option>
-              <option>American</option>
-              <option>Mediterranean</option>
-            </select>
-          </div>
+        <div className="mb-3">
+          <label className="form-label">Cuisine</label>
 
-          <br />
+          <select
+            className="form-select"
+            value={cuisine}
+            onChange={(e) => setCuisine(e.target.value)}
+          >
+            <option>Indian</option>
+            <option>Italian</option>
+            <option>Chinese</option>
+            <option>Mexican</option>
+            <option>American</option>
+            <option>Mediterranean</option>
+          </select>
+        </div>
 
-          <div>
-            <label>Dietary Preference</label>
-            <br />
-            <select
-              value={dietaryPreference}
-              onChange={(e) => setDietaryPreference(e.target.value)}
-            >
-              <option>None</option>
-              <option>Vegetarian</option>
-              <option>Vegan</option>
-              <option>High-Protein</option>
-              <option>Low-Carb</option>
-            </select>
-          </div>
+        <div className="mb-3">
+          <label className="form-label">
+            Dietary Preference
+          </label>
 
-          <br />
+          <select
+            className="form-select"
+            value={dietaryPreference}
+            onChange={(e) =>
+              setDietaryPreference(e.target.value)
+            }
+          >
+            <option>None</option>
+            <option>Vegetarian</option>
+            <option>Vegan</option>
+            <option>High-Protein</option>
+            <option>Low-Carb</option>
+          </select>
+        </div>
 
-          <div>
-            <label>Meal Type</label>
-            <br />
-            <select
-              value={mealType}
-              onChange={(e) => setMealType(e.target.value)}
-            >
-              <option>Breakfast</option>
-              <option>Lunch</option>
-              <option>Dinner</option>
-              <option>Snack</option>
-              <option>Dessert</option>
-            </select>
-          </div>
+        <div className="mb-4">
+          <label className="form-label">Meal Type</label>
 
-          <br />
+          <select
+            className="form-select"
+            value={mealType}
+            onChange={(e) => setMealType(e.target.value)}
+          >
+            <option>Breakfast</option>
+            <option>Lunch</option>
+            <option>Dinner</option>
+            <option>Snack</option>
+            <option>Dessert</option>
+          </select>
+        </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Generating..." : "Generate Recipe"}
-          </button>
-        </form>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading}
+        >
+          {loading ? "Generating..." : "✨ Generate Recipe"}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+          
 
-        {message && <p>{message}</p>}
+        {message && <div>{message}</div>}
         {showHistory && (
   <div>
     <hr />
 
     <h2>My Recipes</h2>
+    <input
+  type="text"
+  placeholder="Search recipes..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+/>
+
+<br />
+<br />
+<select
+  value={selectedCuisine}
+  onChange={(e) => setSelectedCuisine(e.target.value)}
+>
+  <option value="">All Cuisines</option>
+  <option value="Indian">Indian</option>
+  <option value="Italian">Italian</option>
+  <option value="Chinese">Chinese</option>
+  <option value="Mexican">Mexican</option>
+  <option value="American">American</option>
+</select>
+
+<br />
+<br />
+
+<select
+  value={selectedDiet}
+  onChange={(e) => setSelectedDiet(e.target.value)}
+>
+  <option value="">All Dietary Preferences</option>
+  <option value="Vegetarian">Vegetarian</option>
+  <option value="Non-Vegetarian">Non-Vegetarian</option>
+  <option value="Vegan">Vegan</option>
+</select>
+
+<br />
+<br />
 
     {recipes.length === 0 ? (
       <p>No recipes found.</p>
     ) : (
       <ul>
-        {recipes.map((item) => (
+        {recipes
+        .filter((item) =>
+          item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+        .filter((item) =>
+          selectedCuisine === "" || item.cuisine === selectedCuisine
+  )
+        .filter((item) =>
+          selectedDiet === "" || item.dietaryPreference === selectedDiet
+)
+        .map((item) => (
           <li key={item._id}>
             <strong>{item.title}</strong>
             <br />
@@ -344,6 +423,7 @@ const updateRecipe = async (recipeId) => {
     <button onClick={() => setShowHistory(false)}>
       Back to Generator
     </button>
+    
   </div>
 )}
 {editingRecipe && (
