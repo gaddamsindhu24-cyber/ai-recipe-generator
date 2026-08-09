@@ -5,6 +5,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
     Boolean(localStorage.getItem("token"))
   );
+  const [showHistory, setShowHistory] = useState(false);
+  const [recipes, setRecipes] = useState([]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -122,11 +124,69 @@ function App() {
     setRecipe(null);
     setMessage("");
   };
+    const fetchRecipes = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/recipes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message || "Failed to load recipes");
+        return;
+      }
+
+      setRecipes(data.recipes);
+      setShowHistory(true);
+      setMessage("");
+    } catch (error) {
+      setMessage("Cannot connect to server");
+    }
+  };
+  const deleteRecipe = async (recipeId) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/recipes/${recipeId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Failed to delete recipe");
+      return;
+    }
+
+    setRecipes((currentRecipes) =>
+      currentRecipes.filter((item) => item._id !== recipeId)
+    );
+
+    setMessage("Recipe deleted successfully");
+  } catch (error) {
+    setMessage("Cannot connect to server");
+  }
+};
 
   if (isLoggedIn) {
     return (
       <div>
         <h1>AI Recipe Generator 🍳</h1>
+        <button onClick={fetchRecipes}>My Recipes</button>
 
         <button onClick={logout}>Logout</button>
 
@@ -207,6 +267,45 @@ function App() {
         </form>
 
         {message && <p>{message}</p>}
+        {showHistory && (
+  <div>
+    <hr />
+
+    <h2>My Recipes</h2>
+
+    {recipes.length === 0 ? (
+      <p>No recipes found.</p>
+    ) : (
+      <ul>
+        {recipes.map((item) => (
+          <li key={item._id}>
+            <strong>{item.title}</strong>
+            <br />
+            Cuisine: {item.cuisine}
+            <br />
+            Meal: {item.mealType}
+            <br />
+            <button
+              onClick={() => {
+                setRecipe(item);
+                setShowHistory(false);
+              }}
+            >
+              View Recipe
+            </button>
+            <button onClick={() => deleteRecipe(item._id)}>
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <button onClick={() => setShowHistory(false)}>
+      Back to Generator
+    </button>
+  </div>
+)}
 
         {recipe && (
           <div>
