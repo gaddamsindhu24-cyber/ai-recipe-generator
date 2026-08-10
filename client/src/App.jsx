@@ -93,7 +93,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `${API_URL}/api/recipes`,
+        `${API_URL}/api/recipes/generate`,
         {
           method: "POST",
           headers: {
