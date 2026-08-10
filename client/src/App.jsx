@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -216,7 +217,7 @@ const updateRecipe = async (recipeId) => {
 
     setRecipe(data.recipe);
     setEditingRecipe(null);
-    setMessage("Recipe updated successfully");
+    setMessage("Recipe updated successfully 🎉 🧑‍🍳 ✨");
   } catch (error) {
     setMessage("Cannot connect to server");
   }
@@ -233,10 +234,12 @@ const updateRecipe = async (recipeId) => {
 
     <div>
       <button
-        className="btn btn-outline-light me-2"
+        className="btn me-2"
+        style={{ backgroundColor: "#8a66cb", color: "white" }}
         onClick={fetchRecipes}
+        
       >
-        My Recipes
+       🍳My Recipes
       </button>
 
       <button
@@ -252,11 +255,11 @@ const updateRecipe = async (recipeId) => {
         <div className="container  bg-light min-vh-100 p-4">
   <div className="card shadow-sm">
     <div className="card-body">
-      <h2 className="card-title mb-4">🍽️ Generate a Recipe</h2>
+      <h2 className="card-title mb-4" style={{ color: "#e83e8c" }}>🍽️ Generate a Recipe</h2>
 
       <form onSubmit={generateRecipe}>
         <div className="mb-3">
-          <label className="form-label">
+          <label className="form-label fw-semibold">
             Available Ingredients
           </label>
 
@@ -271,55 +274,55 @@ const updateRecipe = async (recipeId) => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Cuisine</label>
+          <label className="form-label fw-semibold">Cuisine</label>
 
           <select
             className="form-select"
             value={cuisine}
             onChange={(e) => setCuisine(e.target.value)}
           >
-            <option>Indian</option>
-            <option>Italian</option>
-            <option>Chinese</option>
-            <option>Mexican</option>
-            <option>American</option>
-            <option>Mediterranean</option>
+            <option>🍛Indian</option>
+            <option>🍝Italian</option>
+            <option>🍜Chinese</option>
+            <option>🌮Mexican</option>
+            <option>🍔American</option>
+            <option>🌊Mediterranean</option>
           </select>
         </div>
 
         <div className="mb-3">
-          <label className="form-label">
+          <label className="form-label fw-semibold">
             Dietary Preference
           </label>
 
           <select
-            className="form-select"
+            className="form-select fw-semibold"
             value={dietaryPreference}
             onChange={(e) =>
               setDietaryPreference(e.target.value)
             }
           >
-            <option>None</option>
-            <option>Vegetarian</option>
-            <option>Vegan</option>
-            <option>High-Protein</option>
-            <option>Low-Carb</option>
+            <option>🍽️None</option>
+            <option>🥗Vegetarian</option>
+            <option>🌱Vegan</option>
+            <option>💪High-Protein</option>
+            <option>🥑carbohydratelow</option>
           </select>
         </div>
 
         <div className="mb-4">
-          <label className="form-label">Meal Type</label>
+          <label className="form-label fw-semibold">Meal Type</label>
 
           <select
             className="form-select"
             value={mealType}
             onChange={(e) => setMealType(e.target.value)}
           >
-            <option>Breakfast</option>
-            <option>Lunch</option>
-            <option>Dinner</option>
-            <option>Snack</option>
-            <option>Dessert</option>
+            <option>🌅Breakfast</option>
+            <option>☀️Lunch</option>
+            <option>🌙Dinner</option>
+            <option>零食</option>
+            <option>🍰Dessert</option>
           </select>
         </div>
 
@@ -337,7 +340,7 @@ const updateRecipe = async (recipeId) => {
           
 
         {message && <div>{message}</div>}
-        {showHistory && (
+        {showHistory && !editingRecipe &&(
   <div className="mx-auto p-4 mt-4 mb-4"
   style={{
     backgroundColor: "#f3eafa",
@@ -409,22 +412,22 @@ const updateRecipe = async (recipeId) => {
 />
 
 <br />
-<br />
+
 <select
   className="form-select w-75"
   value={selectedCuisine}
   onChange={(e) => setSelectedCuisine(e.target.value)}
 >
   <option value="">All Cuisines</option>
-  <option value="Indian">Indian</option>
-  <option value="Italian">Italian</option>
-  <option value="Chinese">Chinese</option>
-  <option value="Mexican">Mexican</option>
-  <option value="American">American</option>
+  <option value="Indian"> 🍛 Indian</option>
+  <option value="Italian"> 🍝 Italian</option>
+  <option value="Chinese"> 🍜 Chinese</option>
+  <option value="Mexican"> 🌮 Mexican</option>
+  <option value="American"> 🍔 American</option>
 </select>
 
 <br />
-<br />
+
 
 <select
   className="form-select w-75"
@@ -436,9 +439,8 @@ const updateRecipe = async (recipeId) => {
   <option value="Non-Vegetarian">Non-Vegetarian</option>
   <option value="Vegan">Vegan</option>
 </select>
-
-<br />
-<br />
+<br/>
+<br/>
 
     {recipes.length === 0 ? (
       <p>No recipes found.</p>
@@ -477,7 +479,11 @@ const updateRecipe = async (recipeId) => {
             
             <button 
             className="btn btn-warning me-2"
-            onClick={() => setEditingRecipe(item)}>
+            onClick={() => {
+              setEditingRecipe(item)
+               setShowHistory(false);
+              
+             } }>
                Edit
             </button>
             <button 
@@ -490,7 +496,14 @@ const updateRecipe = async (recipeId) => {
       </ul>
     )}
 
-    <button onClick={() => setShowHistory(false)}>
+    <button 
+    className="btn btn-secondary"
+  style={{
+    backgroundColor: "#52c137",
+    borderColor: "#9fcd49",
+    color: "white",
+  }}
+    onClick={() => setShowHistory(false)}>
       Back to Generator
     </button>
     
@@ -590,7 +603,9 @@ const updateRecipe = async (recipeId) => {
           <div>
             <hr />
 
-            <h2>{recipe.title}</h2>
+            <h2 className="text-center fw-bold"
+  style={{ color: "#063098" }}
+>{recipe.title}</h2>
 
             <p>
               <strong>Cuisine:</strong> {recipe.cuisine}
