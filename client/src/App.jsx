@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
+const API_URL = "https://ai-recipe-generator-465f.onrender.com";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -31,8 +32,8 @@ function App() {
     setMessage("");
 
     const url = isLogin
-      ? "http://localhost:5000/api/auth/login"
-      : "http://localhost:5000/api/auth/register";
+      ? `${API_URL}/api/auth/login`
+      : `${API_URL}/api/auth/register`
 
     const body = isLogin
       ? { email, password }
@@ -92,7 +93,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/recipes/generate",
+        `${API_URL}/api/recipes`,
         {
           method: "POST",
           headers: {
@@ -134,7 +135,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/recipes",
+        `${API_URL}/api/recipes`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -161,7 +162,7 @@ function App() {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/recipes/${recipeId}`,
+      `${API_URL}/api/recipes/${recipeId}`,
       {
         method: "DELETE",
         headers: {
@@ -191,7 +192,7 @@ const updateRecipe = async (recipeId) => {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/recipes/${recipeId}`,
+       `${API_URL}/api/recipes/${recipeId}`,
       {
         method: "PUT",
         headers: {
